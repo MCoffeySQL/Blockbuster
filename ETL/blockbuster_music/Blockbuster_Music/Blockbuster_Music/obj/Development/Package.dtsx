@@ -1,0 +1,215 @@
+<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="5/19/2024 7:51:23 AM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="LENOVO02"
+  DTS:CreatorName="LENOVO02\pages"
+  DTS:DTSID="{D36711FE-0EF9-471B-BB04-68D5A1968200}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="16.0.5209.0"
+  DTS:LocaleID="1033"
+  DTS:ObjectName="Package"
+  DTS:PackageType="5"
+  DTS:VersionBuild="9"
+  DTS:VersionGUID="{F649166E-377F-4833-AE30-689FF32F7DCA}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[lenovo02.Blockbuster.MAvalon]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{F329FA03-0894-4586-970E-D1B4BA3C5350}"
+      DTS:ObjectName="lenovo02.Blockbuster.MAvalon">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=lenovo02;User ID=MAvalon;Initial Catalog=Blockbuster;Provider=SQLOLEDB.1;Persist Security Info=True;Application Name=SSIS-Package-{F329FA03-0894-4586-970E-D1B4BA3C5350}lenovo02.Blockbuster.MAvalon;Auto Translate=False;">
+          <DTS:Password
+            DTS:Name="Password"
+            Sensitive="1"
+            Encrypted="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAARPFwe1Bj10iHEA7ytCBoawAAAAAIAAAARABUAFMAAAAQZgAAAAEAACAAAADhlEThY+fPi/6UzpRLLoy8cKeSm43T7ZahpI2AZz4jsgAAAAAOgAAAAAIAACAAAACq1+Dq6+Abublbo7r9Th61XuVNgfwLBx+f1lrhLSWOOCAAAAAzOahVat2raOy+AgR0B8nYFU+Xy1y6/NsAQrezfz4elUAAAACEUw3HxN9m2ZGtB9pTQlpwGUa98BX0240abneEdzFuzq8Qv0JO1YURHqRRsZag+7RkXDSKNlok0UCtULizpeiJ</DTS:Password>
+        </DTS:ConnectionManager>
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{4A443E30-3F4A-4319-8AE0-51902232D95B}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="searchFilePath">
+      <DTS:VariableValue
+        DTS:DataType="8">\\DCJS-LENOVO01\Media\Media_MP3\</DTS:VariableValue>
+    </DTS:Variable>
+    <DTS:Variable
+      DTS:CreationName=""
+      DTS:DTSID="{9625FA16-97DA-40B5-8314-15038D5CF47C}"
+      DTS:IncludeInDebugDump="2345"
+      DTS:Namespace="User"
+      DTS:ObjectName="sourceFilePathFull">
+      <DTS:VariableValue
+        DTS:DataType="8">\\DCJS-LENOVO01\Media\Media_MP3\2 Live Crew\As Nasty As They Wanna Be\04 C'mon Babe'.mp3</DTS:VariableValue>
+    </DTS:Variable>
+  </DTS:Variables>
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Foreach Loop Container"
+      DTS:CreationName="STOCK:FOREACHLOOP"
+      DTS:Description="Foreach Loop Container"
+      DTS:DTSID="{4FF5C942-87B6-451D-AACC-3DDE864B9404}"
+      DTS:ExecutableType="STOCK:FOREACHLOOP"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Foreach Loop Container">
+      <DTS:ForEachEnumerator
+        DTS:CreationName="Microsoft.ForEachFileEnumerator"
+        DTS:DTSID="{DE06A22D-06A0-4E55-A487-4FCF9F921F10}"
+        DTS:ObjectName="{DE06A22D-06A0-4E55-A487-4FCF9F921F10}">
+        <DTS:PropertyExpression
+          DTS:Name="Directory">@[User::searchFilePath]</DTS:PropertyExpression>
+        <DTS:ObjectData>
+          <ForEachFileEnumeratorProperties>
+            <FEFEProperty
+              Folder="\\DCJS-LENOVO01\Media\Media_MP3\" />
+            <FEFEProperty
+              FileSpec="*.*" />
+            <FEFEProperty
+              FileNameRetrievalType="0" />
+            <FEFEProperty
+              Recurse="-1" />
+          </ForEachFileEnumeratorProperties>
+        </DTS:ObjectData>
+      </DTS:ForEachEnumerator>
+      <DTS:Variables />
+      <DTS:Executables>
+        <DTS:Executable
+          DTS:refId="Package\Foreach Loop Container\Execute SQL Task"
+          DTS:CreationName="Microsoft.ExecuteSQLTask"
+          DTS:Description="Execute SQL Task"
+          DTS:DTSID="{2C86DA3D-1A8F-46D9-AD57-37123E1AF671}"
+          DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+          DTS:LocaleID="-1"
+          DTS:ObjectName="Execute SQL Task"
+          DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2022; © 2022 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+          DTS:ThreadHint="0">
+          <DTS:Variables />
+          <DTS:PropertyExpression
+            DTS:Name="SqlStatementSource">"INSERT INTO dba.stage_albums(
+  sourceFileNameFull,
+  sourceFolder
+)
+VALUES(
+  '" + REPLACE(@[User::sourceFilePathFull],"'","") + "',
+'" +  @[User::searchFilePath] + "');"</DTS:PropertyExpression>
+          <DTS:ObjectData>
+            <SQLTask:SqlTaskData
+              SQLTask:Connection="{F329FA03-0894-4586-970E-D1B4BA3C5350}"
+              SQLTask:SqlStatementSource="INSERT INTO dba.stage_albums(&#xA;  sourceFileNameFull,&#xA;  sourceFolder&#xA;)&#xA;VALUES(&#xA;  '\\DCJS-LENOVO01\Media\Media_MP3\2 Live Crew\As Nasty As They Wanna Be\04 Cmon Babe.mp3',&#xA;'\\DCJS-LENOVO01\Media\Media_MP3\');" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+          </DTS:ObjectData>
+        </DTS:Executable>
+      </DTS:Executables>
+      <DTS:ForEachVariableMappings>
+        <DTS:ForEachVariableMapping
+          DTS:CreationName=""
+          DTS:DTSID="{A77C1EA0-09C0-4910-9B86-310C5E3BCA52}"
+          DTS:ObjectName="{A77C1EA0-09C0-4910-9B86-310C5E3BCA52}"
+          DTS:ValueIndex="0"
+          DTS:VariableName="User::sourceFilePathFull" />
+      </DTS:ForEachVariableMappings>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Truncate Stage"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:Description="Execute SQL Task"
+      DTS:DTSID="{0A09E31D-136B-4F56-AC76-2F2BC6C2624D}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Truncate Stage"
+      DTS:TaskContact="Execute SQL Task; Microsoft Corporation; SQL Server 2022; © 2022 Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{F329FA03-0894-4586-970E-D1B4BA3C5350}"
+          SQLTask:SqlStatementSource="TRUNCATE TABLE dba.stage_albums" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[Constraint]"
+      DTS:CreationName=""
+      DTS:DTSID="{14814FC2-1D30-4EA0-ADAC-B52343061A96}"
+      DTS:From="Package\Truncate Stage"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="Constraint"
+      DTS:To="Package\Foreach Loop Container" />
+  </DTS:PrecedenceConstraints>
+  <DTS:DesignTimeProperties><![CDATA[<?xml version="1.0"?>
+<!--This CDATA section contains the layout information of the package. The section includes information such as (x,y) coordinates, width, and height.-->
+<!--If you manually edit this section and make a mistake, you can delete it. -->
+<!--The package will still be able to load normally but the previous layout information will be lost and the designer will automatically re-arrange the elements on the design surface.-->
+<Objects
+  Version="8">
+  <!--Each node below will contain properties that do not affect runtime behavior.-->
+  <Package
+    design-time-name="Package">
+    <LayoutInfo>
+      <GraphLayout
+        Capacity="4" xmlns="clr-namespace:Microsoft.SqlServer.IntegrationServices.Designer.Model.Serialization;assembly=Microsoft.SqlServer.IntegrationServices.Graph" xmlns:mssgle="clr-namespace:Microsoft.SqlServer.Graph.LayoutEngine;assembly=Microsoft.SqlServer.Graph" xmlns:assembly="http://schemas.microsoft.com/winfx/2006/xaml">
+        <NodeLayout
+          Size="168,42.6666666666667"
+          Id="Package\Foreach Loop Container\Execute SQL Task"
+          TopLeft="16.833326292535,17.9649088700283" />
+        <ContainerLayout
+          HeaderHeight="43"
+          IsExpanded="True"
+          PanelSize="216,121.333333333334"
+          Size="216.666666666667,164"
+          Id="Package\Foreach Loop Container"
+          TopLeft="140.624993713573,249.736839363202" />
+        <NodeLayout
+          Size="152,42.6666666666667"
+          Id="Package\Truncate Stage"
+          TopLeft="120.624994607642,153.280700349549" />
+        <EdgeLayout
+          Id="Package.PrecedenceConstraints[Constraint]"
+          TopLeft="196.624994607642,195.947367016216">
+          <EdgeLayout.Curve>
+            <mssgle:Curve
+              StartConnector="{assembly:Null}"
+              EndConnector="52.3333324392637,53.7894723469862"
+              Start="0,0"
+              End="52.3333324392637,46.2894723469862">
+              <mssgle:Curve.Segments>
+                <mssgle:SegmentCollection
+                  Capacity="5">
+                  <mssgle:LineSegment
+                    End="0,22.8947361734931" />
+                  <mssgle:CubicBezierSegment
+                    Point1="0,22.8947361734931"
+                    Point2="0,26.8947361734931"
+                    Point3="4,26.8947361734931" />
+                  <mssgle:LineSegment
+                    End="48.3333324392637,26.8947361734931" />
+                  <mssgle:CubicBezierSegment
+                    Point1="48.3333324392637,26.8947361734931"
+                    Point2="52.3333324392637,26.8947361734931"
+                    Point3="52.3333324392637,30.8947361734931" />
+                  <mssgle:LineSegment
+                    End="52.3333324392637,46.2894723469862" />
+                </mssgle:SegmentCollection>
+              </mssgle:Curve.Segments>
+            </mssgle:Curve>
+          </EdgeLayout.Curve>
+          <EdgeLayout.Labels>
+            <EdgeLabelCollection />
+          </EdgeLayout.Labels>
+        </EdgeLayout>
+      </GraphLayout>
+    </LayoutInfo>
+  </Package>
+</Objects>]]></DTS:DesignTimeProperties>
+</DTS:Executable>

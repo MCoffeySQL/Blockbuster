@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RptDataSource xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Name="DCJS-Lenovo02">
+  <ConnectionProperties>
+    <Extension>SQL</Extension>
+    <ConnectString>Data Source=Lenovo02;Initial Catalog=Blockbuster</ConnectString>
+  </ConnectionProperties>
+  <DataSourceID>a95d6bb9-9c0f-48eb-84c7-a744c6f1dc3e</DataSourceID>
+</RptDataSource>

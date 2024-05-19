@@ -11,37 +11,13 @@ ALTER TABLE dbo.movies
   PRIMARY KEY CLUSTERED (id);
 GO
 
---Foreign Key [genreID]
-ALTER TABLE dbo.movies
-  DROP CONSTRAINT IF EXISTS fk_movies_genreID;
-GO
-
-ALTER TABLE dbo.movies
-  ADD CONSTRAINT fk_movies_genreID FOREIGN KEY (genreID)
-  REFERENCES dbo.moviesGenre (id)
-  ON DELETE SET NULL
-  ON UPDATE CASCADE;
-GO
-
---Foreign Key [productionCompanyID]
-ALTER TABLE dbo.movies
-  DROP CONSTRAINT IF EXISTS fk_movies_productionCompanyID;
- GO
-
- ALTER TABLE dbo.movies 
-   ADD CONSTRAINT fk_movies_productionCompanyID FOREIGN KEY (productionCompanyID)
-   REFERENCES dbo.moviesProductionCompany (id)
-   ON DELETE SET NULL
-   ON UPDATE CASCADE;
-GO
-
 --Unique Key [name]
 ALTER TABLE dbo.movies
-  DROP CONSTRAINT IF EXISTS u_movies_name;
+  DROP CONSTRAINT IF EXISTS unq_movies_name;
 GO
 
 ALTER TABLE dbo.movies
-  ADD CONSTRAINT u_movies_name
+  ADD CONSTRAINT unq_movies_name
   UNIQUE([name]);
 GO
 

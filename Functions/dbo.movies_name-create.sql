@@ -1,0 +1,13 @@
+USE Blockbuster;
+GO
+
+DROP FUNCTION IF EXISTS dba.movies_name;
+GO
+
+CREATE FUNCTION dba.movies_name (@sourceFilePathFull VARCHAR(255))
+RETURNS VARCHAR(128)
+WITH EXECUTE AS CALLER
+AS
+BEGIN
+  RETURN(LEFT(REVERSE(SUBSTRING(REVERSE(@sourceFilePathFull),1,CHARINDEX('\',REVERSE(@sourceFilePathFull),1)-1)),LEN(REVERSE(SUBSTRING(REVERSE(@sourceFilePathFull),1,CHARINDEX('\',REVERSE(@sourceFilePathFull),1)-1)))-4));
+END
